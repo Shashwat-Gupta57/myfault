@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of Memory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Reset & Variables --- */
+        :root {
+            --font-serif: "Cormorant Garamond", serif;
+            --font-sans: "Montserrat", sans-serif;
+            
+            --color-rose-50: #fff1f2;
+            --color-rose-200: #fecdd3;
+            --color-rose-800: #9f1239;
+            --color-rose-900: #881337;
+            
+            --color-orange-50: #fff7ed;
+            --color-orange-200: #fed7aa;
+            --color-orange-800: #9a3412;
+            --color-orange-900: #7c2d12;
+            
+            --color-slate-50: #f8fafc;
+            --color-slate-300: #cbd5e1;
+            --color-slate-400: #94a3b8;
+            --color-slate-500: #64748b;
+            --color-slate-700: #334155;
+            --color-slate-800: #1e293b;
+            
+            --color-stone-50: #fafaf9;
+            --color-stone-100: #f5f5f4;
+            --color-stone-200: #e7e5e4;
+            --color-stone-300: #d6d3d1;
+            --color-stone-400: #a8a29e;
+            --color-stone-500: #78716c;
+            --color-stone-600: #57534e;
+            --color-stone-700: #44403c;
+            --color-stone-800: #292524;
+            
+            --color-gray-300: #d1d5db;
+            --color-gray-400: #9ca3af;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-800: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            color: var(--color-slate-800);
+            background-color: #fafafa;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--color-rose-200);
+        }
+
+        /* --- Utilities --- */
+        .min-h-screen { min-height: 100vh; }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .justify-center { justify-content: center; }
+        .items-center { align-items: center; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .z-0 { z-index: 0; }
+        .z-10 { z-index: 10; }
+        .z-20 { z-index: 20; }
+        .text-center { text-align: center; }
+        .overflow-hidden { overflow: hidden; }
+        .pointer-events-none { pointer-events: none; }
+        
+        .font-light { font-weight: 300; }
+        .font-thin { font-weight: 100; }
+        .italic { font-style: italic; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-widest { letter-spacing: 0.1em; }
+        .font-sans { font-family: var(--font-sans); }
+        .font-serif { font-family: var(--font-serif); }
+
+        /* --- Components --- */
+        .section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .fade-text {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+        
+        .fade-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Specific Section Styles --- */
+        
+        /* Landing */
+        #landing {
+            background: linear-gradient(to bottom, var(--color-rose-50), var(--color-orange-50), white);
+        }
+        
+        #gulal-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .landing-title {
+            font-size: 1.25rem;
+            color: rgba(159, 18, 57, 0.6);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.2em;
+            font-family: var(--font-sans);
+        }
+        
+        .landing-main {
+            font-size: 3rem;
+            color: var(--color-rose-900);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+        
+        @media (min-width: 768px) {
+            .landing-title { font-size: 1.5rem; }
+            .landing-main { font-size: 4.5rem; }
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(136, 19, 55, 0.3);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Joy */
+        #joy { background-color: #FFF5EE; }
+        
+        .joy-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3rem;
+            opacity: 0.8;
+            padding: 2rem 0;
+        }
+        
+        .joy-item {
+            transform: rotate(-2deg);
+            transition: transform 0.5s;
+        }
+        .joy-item:nth-child(2) { transform: rotate(3deg); }
+        .joy-item:nth-child(3) { transform: rotate(-1deg); }
+        .joy-item:hover { transform: rotate(0); }
+
+        .joy-item span {
+            font-size: 1.5rem;
+            color: rgba(124, 45, 18, 0.7);
+            border-bottom: 1px solid var(--color-orange-200);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Trust */
+        #trust { background-color: var(--color-slate-50); transition: background-color 1s; }
+        
+        .lock-container {
+            position: relative;
+            width: 4rem;
+            height: 4rem;
+            margin: 0 auto 2rem auto;
+        }
+        
+        .lock-icon {
+            width: 100%;
+            height: 100%;
+            color: var(--color-slate-400);
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .lock-icon.open {
+            transform: translateY(-5px) rotateY(180deg);
+        }
+        
+        .lock-glow {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(219, 234, 254, 0.3);
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.5s, transform 0.5s;
+            z-index: -1;
+        }
+        
+        .lock-icon.open + .lock-glow {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+
+        .dots-container {
+            margin-top: 4rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: var(--color-slate-300);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .dot.visible { opacity: 1; }
+
+        /* Emotional Shift */
+        #shift { background-color: #e5e5e5; }
+
+        /* Heart Section (Sticky) */
+        #heart-wrapper {
+            height: 400vh;
+            position: relative;
+            background-color: #e5e5e5;
+        }
+        
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .black-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: black;
+            opacity: 0; /* Animated via JS */
+            z-index: 0;
+        }
+        
+        .heart-text {
+            position: absolute;
+            z-index: 20;
+            text-align: center;
+            padding: 0 1.5rem;
+            pointer-events: none;
+            opacity: 0; /* Animated via JS */
+        }
+        
+        .heart-container {
+            position: relative;
+            z-index: 10;
+            width: 24rem;
+            height: 24rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: scale(0.8); /* Animated via JS */
+        }
+        
+        .heart-half {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* transform: translateX() animated via JS */
+        }
+        
+        .heart-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 25px rgba(220, 38, 38, 0.6));
+        }
+        
+        .crack-line {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 60%;
+            background-color: rgba(127, 29, 29, 0.5);
+            filter: blur(1px);
+            opacity: 1; /* Animated via JS */
+        }
+        
+        .white-void {
+            position: absolute;
+            inset: 0;
+            background-color: white;
+            z-index: -10;
+        }
+
+        /* Secrets */
+        #secrets {
+            min-height: 100vh;
+            background-color: var(--color-stone-200);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .parallax-bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .secret-word {
+            position: absolute;
+            color: rgba(214, 211, 209, 0.5);
+            font-weight: bold;
+            filter: blur(2px);
+            will-change: transform;
+        }
+        
+        .secrets-card {
+            position: relative;
+            z-index: 10;
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            padding: 3rem 5rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            margin: 0 1.5rem;
+        }
+
+        /* Guilt */
+        #guilt { background-color: #1c1917; color: var(--color-stone-300); }
+        
+        .divider-line {
+            width: 0;
+            height: 1px;
+            background-color: var(--color-stone-600);
+            margin: 3rem auto;
+            transition: width 1.5s ease-out;
+        }
+        .divider-line.visible { width: 100px; }
+
+        /* Final */
+        #final { background-color: white; }
+        
+        footer {
+            padding: 3rem 0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--color-gray-300);
+            background-color: white;
+            font-family: var(--font-sans);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+    </style>
+</head>
+<body>
+
+    <main>
+        <!-- 1. Landing -->
+        <section id="landing" class="section">
+            <canvas id="gulal-canvas"></canvas>
+            <div class="z-10 text-center relative">
+                <div class="fade-text landing-title">THIS IS NOT AN APOLOGY</div>
+                <div class="fade-text landing-main" style="transition-delay: 1.5s;">This is a memory</div>
+                <div class="scroll-hint">Scroll</div>
+            </div>
+        </section>
+
+        <!-- 2. Joy -->
+        <section id="joy" class="section">
+            <div style="max-width: 42rem; text-align: center;">
+                <div class="fade-text" style="font-size: 2.25rem; color: rgba(124, 45, 18, 0.8); font-weight: 300; line-height: 1.6;">
+                    It was a last-minute plan.
+                </div>
+                <div class="fade-text" style="font-size: 1.25rem; color: rgba(154, 52, 18, 0.6); font-style: italic; margin-top: 1rem; font-family: var(--font-serif);">
+                    "Bring her along," they said.
+                </div>
+                
+                <div class="joy-grid">
+                    <div class="fade-text joy-item" style="transition-delay: 0.4s;">
+                        <span>Laughter</span>
+                    </div>
+                    <div class="fade-text joy-item" style="transition-delay: 0.6s;">
+                        <span>Small drives</span>
+                    </div>
+                    <div class="fade-text joy-item" style="transition-delay: 0.8s;">
+                        <span>Photos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Trust -->
+        <section id="trust" class="section">
+            <div style="max-width: 36rem; text-align: center;">
+                <div class="lock-container fade-text">
+                    <div class="lock-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="lock-glow"></div>
+                </div>
+
+                <div class="fade-text" style="font-size: 2.25rem; color: var(--color-slate-700); font-weight: 300; margin-bottom: 2rem; transition-delay: 0.2s;">
+                    I gave you my phone. <br/>
+                    <span style="font-weight: 400;">Openly.</span>
+                </div>
+                
+                <div class="fade-text" style="font-size: 1.125rem; color: var(--color-slate-500); font-family: var(--font-sans); font-weight: 300; letter-spacing: 0.05em; transition-delay: 0.5s;">
+                    "Here is the password."
+                </div>
+                
+                <div class="dots-container">
+                    <div class="dot" style="transition-delay: 0.8s;"></div>
+                    <div class="dot" style="transition-delay: 1.0s;"></div>
+                    <div class="dot" style="transition-delay: 1.2s;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Emotional Shift -->
+        <section id="shift" class="section">
+            <div style="max-width: 48rem; text-align: center;">
+                <div class="fade-text" style="font-size: 3.75rem; color: var(--color-gray-300); font-weight: 100; margin-bottom: 3rem;">
+                    ...
+                </div>
+                <div class="fade-text" style="font-size: 1.5rem; color: var(--color-gray-600); font-weight: 300; margin-bottom: 1rem; transition-delay: 0.3s;">
+                    The colors began to fade.
+                </div>
+                <div class="fade-text" style="font-size: 1.25rem; color: var(--color-gray-500); font-weight: 300; transition-delay: 0.6s;">
+                    Silence grew louder than words.
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Denial (The Heart Crack) -->
+        <div id="heart-wrapper">
+            <div class="sticky-container">
+                <div class="black-overlay" id="heart-bg"></div>
+                
+                <div class="heart-text" id="heart-text">
+                    <h2 style="font-size: 2.5rem; color: white; margin-bottom: 1.5rem; font-family: var(--font-serif);">Trust was not denied.</h2>
+                    <p style="font-size: 1.25rem; color: var(--color-gray-400); font-weight: 300; margin-bottom: 0.5rem;">It was measured.</p>
+                    <p style="font-size: 1.25rem; color: rgba(239, 68, 68, 0.8); font-weight: 300;">And I was weighed.</p>
+                </div>
+
+                <div class="heart-container" id="heart-container">
+                    <!-- Left Half -->
+                    <div class="heart-half" id="heart-left">
+                        <svg viewBox="0 0 100 100" class="heart-svg">
+                            <path d="M50 88.9 L16.7 55.6 C7.2 46.1 7.2 30.9 16.7 21.4 s24.7-9.5 33.3 0 L50 30 L50 88.9 Z" 
+                                  fill="#2a0a0a" stroke="#8B0000" stroke-width="0.5" />
+                        </svg>
+                    </div>
+                    <!-- Right Half -->
+                    <div class="heart-half" id="heart-right">
+                        <svg viewBox="0 0 100 100" class="heart-svg">
+                            <path d="M50 88.9 L50 30 L50 21.4 c8.6-9.5 23.8-9.5 33.3 0 s9.5 24.7 0 34.2 L50 88.9 Z" 
+                                  fill="#2a0a0a" stroke="#8B0000" stroke-width="0.5" />
+                        </svg>
+                    </div>
+                    <!-- Crack -->
+                    <div class="crack-line" id="heart-crack"></div>
+                </div>
+                
+                <div class="white-void"></div>
+            </div>
+        </div>
+
+        <!-- 6. Second Chance -->
+        <section id="second-chance" class="section" style="background-color: var(--color-stone-50); min-height: 80vh;">
+            <div style="text-align: center; max-width: 36rem;">
+                <div class="fade-text" style="font-size: 1.875rem; color: var(--color-stone-600); font-weight: 300; margin-bottom: 6rem;">
+                    I asked again.
+                </div>
+                <div class="fade-text" style="font-size: 1.875rem; color: var(--color-stone-400); font-weight: 300; font-style: italic; transition-delay: 0.5s;">
+                    Even later.
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Secrets -->
+        <div id="secrets">
+            <div class="parallax-bg">
+                <div class="secret-word" data-speed="0.2" style="top: 20%; left: 10%; font-size: 4rem;">Car crash</div>
+                <div class="secret-word" data-speed="0.5" style="top: 60%; right: 10%; font-size: 3rem;">Overspeeding</div>
+                <div class="secret-word" data-speed="0.1" style="top: 40%; left: 40%; font-size: 5rem; opacity: 0.3;">Sneaking out</div>
+                <div class="secret-word" data-speed="0.3" style="bottom: 10%; left: 20%; font-size: 2.5rem;">Things said in trust</div>
+            </div>
+            
+            <div class="secrets-card fade-text">
+                <h2 style="font-size: 2.5rem; color: var(--color-stone-700); font-family: var(--font-serif); text-align: center; line-height: 1.2;">
+                    Maybe trust was uneven.
+                </h2>
+            </div>
+        </div>
+
+        <!-- 8. Guilt -->
+        <section id="guilt" class="section">
+            <div style="max-width: 36rem; text-align: center;">
+                <div class="fade-text" style="font-size: 1.25rem; line-height: 2; font-weight: 300; color: var(--color-stone-400);">
+                    I remember the speaker moment. <br/>
+                    The silence that followed. <br/>
+                    <span style="color: var(--color-stone-200);">I felt the weight of it.</span>
+                </div>
+                <div class="divider-line"></div>
+                <div class="fade-text" style="font-size: 1.5rem; font-style: italic; color: var(--color-stone-500); font-family: var(--font-serif); transition-delay: 0.4s;">
+                    Accountability is quiet.
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. Final -->
+        <section id="final" class="section">
+            <div style="text-align: center;">
+                <div class="fade-text" style="font-size: 1.5rem; color: var(--color-gray-800); font-weight: 300; letter-spacing: 0.05em; margin-bottom: 2rem;">
+                    No blame.
+                </div>
+                <div class="fade-text" style="font-size: 1.5rem; color: var(--color-gray-800); font-weight: 300; letter-spacing: 0.05em; transition-delay: 0.5s;">
+                    No revenge.
+                </div>
+                <div style="height: 4rem;"></div>
+                <div class="fade-text" style="font-size: 3.5rem; color: black; font-family: var(--font-serif); letter-spacing: -0.02em; transition-delay: 1.5s;">
+                    Just clarity.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        ECHOES OF MEMORY
+    </footer>
+
+    <script>
+        // --- Utils ---
+        const mapRange = (value, inMin, inMax, outMin, outMax) => {
+            return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+        };
+        const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+
+        // --- Intersection Observer for Fade Text ---
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Special handling for lock icon
+                    if (entry.target.classList.contains('lock-container')) {
+                        setTimeout(() => {
+                            entry.target.querySelector('.lock-icon').classList.add('open');
+                        }, 1000);
+                    }
+                    
+                    // Special handling for divider line
+                    if (entry.target.parentElement && entry.target.parentElement.querySelector('.divider-line')) {
+                         entry.target.parentElement.querySelector('.divider-line').classList.add('visible');
+                    }
+                    
+                    // Special handling for dots
+                    if (entry.target.classList.contains('dot')) {
+                        entry.target.classList.add('visible');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-text, .dot').forEach(el => observer.observe(el));
+        
+        // Also observe the divider line container's parent or trigger manually
+        const guiltSection = document.getElementById('guilt');
+        const guiltObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting) {
+                document.querySelector('.divider-line').classList.add('visible');
+            }
+        }, { threshold: 0.5 });
+        guiltObserver.observe(guiltSection);
+
+
+        // --- Particle System ---
+        const canvas = document.getElementById('gulal-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function initParticles() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            particles = [];
+            
+            const colors = ['rgba(255, 105, 180, 0.4)', 'rgba(255, 160, 122, 0.4)', 'rgba(255, 218, 185, 0.3)', 'rgba(255, 192, 203, 0.4)'];
+            
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 8 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    dx: (Math.random() - 0.5) * 0.3,
+                    dy: (Math.random() - 0.5) * 0.3,
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.x += p.dx;
+                p.y += p.dy;
+                
+                if (p.x < -50) p.x = width + 50;
+                if (p.x > width + 50) p.x = -50;
+                if (p.y < -50) p.y = height + 50;
+                if (p.y > height + 50) p.y = -50;
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        animateParticles();
+
+
+        // --- Scroll Animations (Heart & Parallax) ---
+        const heartWrapper = document.getElementById('heart-wrapper');
+        const heartBg = document.getElementById('heart-bg');
+        const heartText = document.getElementById('heart-text');
+        const heartContainer = document.getElementById('heart-container');
+        const heartLeft = document.getElementById('heart-left');
+        const heartRight = document.getElementById('heart-right');
+        const heartCrack = document.getElementById('heart-crack');
+        
+        const secretsSection = document.getElementById('secrets');
+        const secretWords = document.querySelectorAll('.secret-word');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+
+            // Heart Section Logic
+            const heartRect = heartWrapper.getBoundingClientRect();
+            const heartStart = heartWrapper.offsetTop;
+            const heartHeight = heartWrapper.offsetHeight;
+            
+            // Calculate progress (0 to 1) within the scrollable area of the sticky section
+            // The sticky content is 100vh, so scrollable distance is heartHeight - viewportHeight
+            const scrollableDistance = heartHeight - viewportHeight;
+            const scrolled = scrollY - heartStart;
+            
+            let progress = 0;
+            if (scrolled > 0) {
+                progress = scrolled / scrollableDistance;
+            }
+            progress = clamp(progress, 0, 1);
+
+            // Apply Animations based on progress
+            
+            // 1. Scale Heart: 0 -> 0.2 -> 0.5 maps to Scale 0.8 -> 1 -> 1.5
+            let scale = 0.8;
+            if (progress < 0.2) {
+                scale = mapRange(progress, 0, 0.2, 0.8, 1);
+            } else if (progress < 0.5) {
+                scale = mapRange(progress, 0.2, 0.5, 1, 1.5);
+            } else {
+                scale = 1.5;
+            }
+            heartContainer.style.transform = `scale(${scale})`;
+
+            // 2. Background Opacity: 0 -> 0.2 maps to 0 -> 1
+            const bgOp = clamp(mapRange(progress, 0, 0.2, 0, 1), 0, 1);
+            heartBg.style.opacity = bgOp;
+
+            // 3. Text Opacity: 0.1 -> 0.3 (Fade In) -> 0.4 (Fade Out)
+            let textOp = 0;
+            if (progress > 0.1 && progress <= 0.3) {
+                textOp = mapRange(progress, 0.1, 0.3, 0, 1);
+            } else if (progress > 0.3 && progress < 0.4) {
+                textOp = mapRange(progress, 0.3, 0.4, 1, 0);
+            }
+            heartText.style.opacity = textOp;
+
+            // 4. Crack Separation: 0.4 -> 0.8 maps to 0 -> 2000px
+            let separation = 0;
+            if (progress > 0.4) {
+                separation = mapRange(progress, 0.4, 0.8, 0, 2000);
+            }
+            heartLeft.style.transform = `translateX(${-separation}px)`;
+            heartRight.style.transform = `translateX(${separation}px)`;
+
+            // 5. Crack Line Opacity: Fades out as they separate
+            let crackOp = 1;
+            if (progress > 0.4) {
+                crackOp = clamp(mapRange(progress, 0.4, 0.5, 1, 0), 0, 1);
+            }
+            heartCrack.style.opacity = crackOp;
+
+
+            // Secrets Parallax Logic
+            const secretsRect = secretsSection.getBoundingClientRect();
+            // If section is in view
+            if (secretsRect.top < viewportHeight && secretsRect.bottom > 0) {
+                // Calculate relative scroll position
+                const relativeScroll = (viewportHeight - secretsRect.top) * 0.5; // Factor to slow it down
+                
+                secretWords.forEach(word => {
+                    const speed = parseFloat(word.getAttribute('data-speed'));
+                    const yPos = relativeScroll * speed * -1; // Move up
+                    word.style.transform = `translateY(${yPos}px)`;
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>
