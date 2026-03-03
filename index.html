@@ -3,48 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Echoes of Memory</title>
+    <title>COURT IS IN SESSION</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         /* --- Reset & Variables --- */
         :root {
-            --font-serif: "Cormorant Garamond", serif;
+            --font-display: "Anton", sans-serif;
+            --font-mono: "Courier Prime", monospace;
             --font-sans: "Montserrat", sans-serif;
             
-            --color-rose-50: #fff1f2;
-            --color-rose-200: #fecdd3;
-            --color-rose-800: #9f1239;
-            --color-rose-900: #881337;
+            --color-bg: #f5f5f5;
+            --color-text: #1a1a1a;
+            --color-accent: #dc2626; /* Red */
+            --color-highlight: #facc15; /* Yellow */
             
-            --color-orange-50: #fff7ed;
-            --color-orange-200: #fed7aa;
-            --color-orange-800: #9a3412;
-            --color-orange-900: #7c2d12;
-            
-            --color-slate-50: #f8fafc;
-            --color-slate-300: #cbd5e1;
-            --color-slate-400: #94a3b8;
-            --color-slate-500: #64748b;
-            --color-slate-700: #334155;
-            --color-slate-800: #1e293b;
-            
-            --color-stone-50: #fafaf9;
-            --color-stone-100: #f5f5f4;
-            --color-stone-200: #e7e5e4;
-            --color-stone-300: #d6d3d1;
-            --color-stone-400: #a8a29e;
-            --color-stone-500: #78716c;
-            --color-stone-600: #57534e;
-            --color-stone-700: #44403c;
-            --color-stone-800: #292524;
-            
-            --color-gray-300: #d1d5db;
-            --color-gray-400: #9ca3af;
-            --color-gray-500: #6b7280;
-            --color-gray-600: #4b5563;
-            --color-gray-800: #1f2937;
+            --shake-intensity: 0px;
         }
 
         * {
@@ -54,44 +29,27 @@
         }
 
         body {
-            font-family: var(--font-serif);
-            color: var(--color-slate-800);
-            background-color: #fafafa;
+            font-family: var(--font-mono);
+            color: var(--color-text);
+            background-color: var(--color-bg);
             overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
         }
-
-        ::selection {
-            background: var(--color-rose-200);
+        
+        body.dramatic-mode {
+            --color-bg: #1a0505;
+            --color-text: #ffffff;
+            --shake-intensity: 2px;
+            animation: bg-pulse 0.5s infinite;
+        }
+        
+        @keyframes bg-pulse {
+            0% { background-color: #1a0505; }
+            50% { background-color: #2b0a0a; }
+            100% { background-color: #1a0505; }
         }
 
         /* --- Utilities --- */
-        .min-h-screen { min-height: 100vh; }
-        .w-full { width: 100%; }
-        .h-full { height: 100%; }
-        .flex { display: flex; }
-        .flex-col { flex-direction: column; }
-        .justify-center { justify-content: center; }
-        .items-center { align-items: center; }
-        .relative { position: relative; }
-        .absolute { position: absolute; }
-        .fixed { position: fixed; }
-        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-        .z-0 { z-index: 0; }
-        .z-10 { z-index: 10; }
-        .z-20 { z-index: 20; }
-        .text-center { text-align: center; }
-        .overflow-hidden { overflow: hidden; }
-        .pointer-events-none { pointer-events: none; }
-        
-        .font-light { font-weight: 300; }
-        .font-thin { font-weight: 100; }
-        .italic { font-style: italic; }
-        .uppercase { text-transform: uppercase; }
-        .tracking-widest { letter-spacing: 0.1em; }
-        .font-sans { font-family: var(--font-sans); }
-        .font-serif { font-family: var(--font-serif); }
-
-        /* --- Components --- */
         .section {
             min-height: 100vh;
             width: 100%;
@@ -102,674 +60,605 @@
             position: relative;
             overflow: hidden;
             padding: 2rem;
+            text-align: center;
         }
 
-        .fade-text {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        .hidden { display: none !important; }
+        .uppercase { text-transform: uppercase; }
+        .bold { font-weight: bold; }
+        .red { color: var(--color-accent); }
+        .bg-red { background-color: var(--color-accent); color: white; }
+        
+        .shake-constant {
+            animation: shake 0.5s infinite;
         }
         
-        .fade-text.visible {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        /* --- Specific Section Styles --- */
+        /* --- Components --- */
         
-        /* Landing */
-        #landing {
-            background: linear-gradient(to bottom, var(--color-rose-50), var(--color-orange-50), white);
-        }
-        
-        #gulal-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .landing-title {
-            font-size: 1.25rem;
-            color: rgba(159, 18, 57, 0.6);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.2em;
-            font-family: var(--font-sans);
-        }
-        
-        .landing-main {
-            font-size: 3rem;
-            color: var(--color-rose-900);
-            margin-bottom: 3rem;
-            font-weight: 300;
-        }
-        
-        @media (min-width: 768px) {
-            .landing-title { font-size: 1.5rem; }
-            .landing-main { font-size: 4.5rem; }
-        }
-
-        .scroll-hint {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(136, 19, 55, 0.3);
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
+        /* Toggle */
+        .mode-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            background: black;
+            color: white;
+            border: 2px solid var(--color-accent);
+            padding: 0.5rem 1rem;
+            font-family: var(--font-display);
+            cursor: pointer;
             text-transform: uppercase;
-            animation: bounce 2s infinite;
+            letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+        .mode-toggle:hover { transform: scale(1.05); }
+        body.dramatic-mode .mode-toggle {
+            background: var(--color-accent);
+            color: black;
+            box-shadow: 0 0 10px var(--color-accent);
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
+        /* Landing */
+        #landing h1 {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            line-height: 0.9;
+            margin-bottom: 1rem;
+            transform: skewX(-5deg);
         }
-
-        /* Joy */
-        #joy { background-color: #FFF5EE; }
-        
-        .joy-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 3rem;
-            opacity: 0.8;
-            padding: 2rem 0;
-        }
-        
-        .joy-item {
-            transform: rotate(-2deg);
-            transition: transform 0.5s;
-        }
-        .joy-item:nth-child(2) { transform: rotate(3deg); }
-        .joy-item:nth-child(3) { transform: rotate(-1deg); }
-        .joy-item:hover { transform: rotate(0); }
-
-        .joy-item span {
+        .subtitle {
             font-size: 1.5rem;
-            color: rgba(124, 45, 18, 0.7);
-            border-bottom: 1px solid var(--color-orange-200);
-            padding-bottom: 0.5rem;
+            background: black;
+            color: white;
+            padding: 0.5rem 1rem;
+            transform: rotate(-2deg);
+            display: inline-block;
         }
 
-        /* Trust */
-        #trust { background-color: var(--color-slate-50); transition: background-color 1s; }
-        
-        .lock-container {
-            position: relative;
-            width: 4rem;
-            height: 4rem;
-            margin: 0 auto 2rem auto;
-        }
-        
-        .lock-icon {
-            width: 100%;
-            height: 100%;
-            color: var(--color-slate-400);
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .lock-icon.open {
-            transform: translateY(-5px) rotateY(180deg);
-        }
-        
-        .lock-glow {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(219, 234, 254, 0.3);
-            border-radius: 50%;
-            filter: blur(20px);
+        /* Trial Section */
+        .charge-card {
+            background: white;
+            border: 4px solid black;
+            padding: 2rem;
+            margin: 1rem;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+            transform: rotate(var(--rotation));
+            max-width: 400px;
             opacity: 0;
-            transform: scale(0.5);
-            transition: opacity 0.5s, transform 0.5s;
-            z-index: -1;
+            transform: translateY(50px) rotate(var(--rotation));
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: black;
         }
-        
-        .lock-icon.open + .lock-glow {
+        .charge-card.visible {
             opacity: 1;
-            transform: scale(1.5);
+            transform: translateY(0) rotate(var(--rotation));
+        }
+        .charge-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            border-bottom: 2px solid black;
+            margin-bottom: 1rem;
         }
 
-        .dots-container {
-            margin-top: 4rem;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-        
-        .dot {
-            width: 0.5rem;
-            height: 0.5rem;
-            border-radius: 50%;
-            background-color: var(--color-slate-300);
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        
-        .dot.visible { opacity: 1; }
-
-        /* Emotional Shift */
-        #shift { background-color: #e5e5e5; }
-
-        /* Heart Section (Sticky) */
-        #heart-wrapper {
-            height: 400vh;
+        /* Sus Meter */
+        .sus-meter-container {
+            width: 80%;
+            max-width: 600px;
+            height: 40px;
+            border: 4px solid black;
+            background: white;
+            margin: 2rem 0;
             position: relative;
-            background-color: #e5e5e5;
         }
-        
-        .sticky-container {
+        .sus-meter-fill {
+            height: 100%;
+            width: 0%;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--color-accent),
+                var(--color-accent) 10px,
+                #b91c1c 10px,
+                #b91c1c 20px
+            );
+            transition: width 0.5s ease-out;
+        }
+        .sus-label {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            font-weight: bold;
+            font-family: var(--font-mono);
+        }
+        .sus-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 black;
+            z-index: 10;
+        }
+
+        /* Folder Reveal (Sticky) */
+        #folder-section {
+            height: 300vh;
+            position: relative;
+            background: #e5e5e5;
+        }
+        .sticky-stage {
             position: sticky;
             top: 0;
             height: 100vh;
             width: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
         
-        .black-overlay {
-            position: absolute;
-            inset: 0;
-            background-color: black;
-            opacity: 0; /* Animated via JS */
-            z-index: 0;
-        }
-        
-        .heart-text {
-            position: absolute;
-            z-index: 20;
-            text-align: center;
-            padding: 0 1.5rem;
-            pointer-events: none;
-            opacity: 0; /* Animated via JS */
-        }
-        
-        .heart-container {
+        .folder {
+            width: 150px;
+            height: 120px;
+            background: #fbbf24;
+            border-radius: 0 10px 10px 10px;
             position: relative;
-            z-index: 10;
-            width: 24rem;
-            height: 24rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform: scale(0.8); /* Animated via JS */
-        }
-        
-        .heart-half {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            /* transform: translateX() animated via JS */
-        }
-        
-        .heart-svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 25px rgba(220, 38, 38, 0.6));
-        }
-        
-        .crack-line {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 60%;
-            background-color: rgba(127, 29, 29, 0.5);
-            filter: blur(1px);
-            opacity: 1; /* Animated via JS */
-        }
-        
-        .white-void {
-            position: absolute;
-            inset: 0;
-            background-color: white;
-            z-index: -10;
-        }
-
-        /* Secrets */
-        #secrets {
-            min-height: 100vh;
-            background-color: var(--color-stone-200);
-            position: relative;
-            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
         }
-        
-        .parallax-bg {
+        .folder::before {
+            content: '';
             position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-            user-select: none;
+            top: -20px;
+            left: 0;
+            width: 60px;
+            height: 20px;
+            background: #fbbf24;
+            border-radius: 10px 10px 0 0;
         }
-        
-        .secret-word {
-            position: absolute;
-            color: rgba(214, 211, 209, 0.5);
+        .folder-label {
+            font-family: var(--font-mono);
             font-weight: bold;
-            filter: blur(2px);
-            will-change: transform;
-        }
-        
-        .secrets-card {
-            position: relative;
-            z-index: 10;
-            background-color: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(12px);
-            padding: 3rem 5rem;
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            margin: 0 1.5rem;
+            color: black;
+            background: white;
+            padding: 2px 8px;
+            border: 1px solid black;
+            transform: rotate(-5deg);
         }
 
-        /* Guilt */
-        #guilt { background-color: #1c1917; color: var(--color-stone-300); }
-        
-        .divider-line {
-            width: 0;
-            height: 1px;
-            background-color: var(--color-stone-600);
-            margin: 3rem auto;
-            transition: width 1.5s ease-out;
-        }
-        .divider-line.visible { width: 100px; }
-
-        /* Final */
-        #final { background-color: white; }
-        
-        footer {
-            padding: 3rem 0;
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--color-gray-300);
-            background-color: white;
-            font-family: var(--font-sans);
-            letter-spacing: 0.1em;
+        .stamp {
+            position: absolute;
+            font-family: var(--font-display);
+            font-size: 8rem;
+            color: var(--color-accent);
+            border: 8px solid var(--color-accent);
+            padding: 1rem 2rem;
             text-transform: uppercase;
+            transform: scale(3) rotate(-15deg);
+            opacity: 0;
+            pointer-events: none;
+            mix-blend-mode: multiply;
+        }
+        .stamp.stamped {
+            animation: stamp-in 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes stamp-in {
+            0% { opacity: 0; transform: scale(3) rotate(-15deg); }
+            100% { opacity: 1; transform: scale(1) rotate(-15deg); }
+        }
+
+        .glitch-text {
+            position: relative;
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: black;
+            background: white;
+            padding: 1rem;
+            border: 2px solid black;
+            margin-top: 2rem;
+            display: none;
+        }
+        .glitch-text.active { display: block; animation: glitch-skew 1s infinite linear alternate-reverse; }
+        
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-10deg); }
+            40% { transform: skew(10deg); }
+            60% { transform: skew(-5deg); }
+            80% { transform: skew(5deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        /* Explain Button */
+        .explain-btn {
+            background: black;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: transform 0.1s;
+            display: none; /* Hidden initially */
+        }
+        .explain-btn:active { transform: scale(0.95); }
+        
+        .theory-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #fef08a;
+            color: black;
+            border: 4px solid black;
+            padding: 2rem;
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 50;
+            box-shadow: 10px 10px 0 black;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .theory-popup.show { transform: translate(-50%, -50%) scale(1); }
+
+        /* Scoreboard */
+        .scoreboard {
+            display: flex;
+            gap: 2rem;
+            font-family: var(--font-display);
+            font-size: 3rem;
+            margin: 2rem 0;
+            color: black;
+        }
+        .score-box {
+            background: white;
+            border: 4px solid black;
+            padding: 1rem;
+            min-width: 150px;
+        }
+        .score-label { font-size: 1rem; font-family: var(--font-mono); }
+
+        /* Inside Jokes */
+        .joke-marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            font-family: var(--font-display);
+            font-size: 4rem;
+            color: rgba(0,0,0,0.1);
+            position: absolute;
+            width: 100%;
+        }
+        
+        /* Audacity */
+        .audacity-text {
+            font-size: 4rem;
+            font-family: var(--font-display);
+            line-height: 0.8;
+            color: var(--color-accent);
+        }
+        
+        #sarcastic-comment {
+            margin-top: 2rem; 
+            font-weight: bold; 
+            opacity: 0; 
+            transition: opacity 0.5s;
+            color: black;
+            background: white;
+            padding: 1rem;
+            border: 2px solid black;
         }
 
     </style>
 </head>
 <body>
 
+    <button class="mode-toggle" id="modeToggle">Dramatic Mode: OFF</button>
+
     <main>
         <!-- 1. Landing -->
         <section id="landing" class="section">
-            <canvas id="gulal-canvas"></canvas>
-            <div class="z-10 text-center relative">
-                <div class="fade-text landing-title">THIS IS NOT AN APOLOGY</div>
-                <div class="fade-text landing-main" style="transition-delay: 1.5s;">This is a memory</div>
-                <div class="scroll-hint">Scroll</div>
-            </div>
+            <h1 class="shake-constant">COURT IS NOW<br><span class="red">IN SESSION</span></h1>
+            <div class="subtitle">CASE #404: THE BETRAYAL</div>
+            <p style="margin-top: 2rem; font-family: var(--font-mono);">Scroll to proceed with prosecution ↓</p>
         </section>
 
-        <!-- 2. Joy -->
-        <section id="joy" class="section">
-            <div style="max-width: 42rem; text-align: center;">
-                <div class="fade-text" style="font-size: 2.25rem; color: rgba(124, 45, 18, 0.8); font-weight: 300; line-height: 1.6;">
-                    It was a last-minute plan.
-                </div>
-                <div class="fade-text" style="font-size: 1.25rem; color: rgba(154, 52, 18, 0.6); font-style: italic; margin-top: 1rem; font-family: var(--font-serif);">
-                    "Bring her along," they said.
-                </div>
-                
-                <div class="joy-grid">
-                    <div class="fade-text joy-item" style="transition-delay: 0.4s;">
-                        <span>Laughter</span>
-                    </div>
-                    <div class="fade-text joy-item" style="transition-delay: 0.6s;">
-                        <span>Small drives</span>
-                    </div>
-                    <div class="fade-text joy-item" style="transition-delay: 0.8s;">
-                        <span>Photos</span>
-                    </div>
-                </div>
+        <!-- 2. Joy (The Setup) -->
+        <section class="section" style="background: #fffbeb; color: black;">
+            <h2 style="font-family: var(--font-display); font-size: 3rem; margin-bottom: 2rem;">EXHIBIT A: THE GOOD TIMES</h2>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <div class="charge-card visible" style="--rotation: -2deg;">Laughter</div>
+                <div class="charge-card visible" style="--rotation: 3deg;">Small Drives</div>
+                <div class="charge-card visible" style="--rotation: -1deg;">"Besties Forever"</div>
             </div>
+            <p style="margin-top: 2rem; font-style: italic;">Everything seemed perfect...</p>
         </section>
 
-        <!-- 3. Trust -->
-        <section id="trust" class="section">
-            <div style="max-width: 36rem; text-align: center;">
-                <div class="lock-container fade-text">
-                    <div class="lock-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <div class="lock-glow"></div>
-                </div>
-
-                <div class="fade-text" style="font-size: 2.25rem; color: var(--color-slate-700); font-weight: 300; margin-bottom: 2rem; transition-delay: 0.2s;">
-                    I gave you my phone. <br/>
-                    <span style="font-weight: 400;">Openly.</span>
-                </div>
-                
-                <div class="fade-text" style="font-size: 1.125rem; color: var(--color-slate-500); font-family: var(--font-sans); font-weight: 300; letter-spacing: 0.05em; transition-delay: 0.5s;">
-                    "Here is the password."
-                </div>
-                
-                <div class="dots-container">
-                    <div class="dot" style="transition-delay: 0.8s;"></div>
-                    <div class="dot" style="transition-delay: 1.0s;"></div>
-                    <div class="dot" style="transition-delay: 1.2s;"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. Emotional Shift -->
-        <section id="shift" class="section">
-            <div style="max-width: 48rem; text-align: center;">
-                <div class="fade-text" style="font-size: 3.75rem; color: var(--color-gray-300); font-weight: 100; margin-bottom: 3rem;">
-                    ...
-                </div>
-                <div class="fade-text" style="font-size: 1.5rem; color: var(--color-gray-600); font-weight: 300; margin-bottom: 1rem; transition-delay: 0.3s;">
-                    The colors began to fade.
-                </div>
-                <div class="fade-text" style="font-size: 1.25rem; color: var(--color-gray-500); font-weight: 300; transition-delay: 0.6s;">
-                    Silence grew louder than words.
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. Denial (The Heart Crack) -->
-        <div id="heart-wrapper">
-            <div class="sticky-container">
-                <div class="black-overlay" id="heart-bg"></div>
-                
-                <div class="heart-text" id="heart-text">
-                    <h2 style="font-size: 2.5rem; color: white; margin-bottom: 1.5rem; font-family: var(--font-serif);">Trust was not denied.</h2>
-                    <p style="font-size: 1.25rem; color: var(--color-gray-400); font-weight: 300; margin-bottom: 0.5rem;">It was measured.</p>
-                    <p style="font-size: 1.25rem; color: rgba(239, 68, 68, 0.8); font-weight: 300;">And I was weighed.</p>
-                </div>
-
-                <div class="heart-container" id="heart-container">
-                    <!-- Left Half -->
-                    <div class="heart-half" id="heart-left">
-                        <svg viewBox="0 0 100 100" class="heart-svg">
-                            <path d="M50 88.9 L16.7 55.6 C7.2 46.1 7.2 30.9 16.7 21.4 s24.7-9.5 33.3 0 L50 30 L50 88.9 Z" 
-                                  fill="#2a0a0a" stroke="#8B0000" stroke-width="0.5" />
-                        </svg>
-                    </div>
-                    <!-- Right Half -->
-                    <div class="heart-half" id="heart-right">
-                        <svg viewBox="0 0 100 100" class="heart-svg">
-                            <path d="M50 88.9 L50 30 L50 21.4 c8.6-9.5 23.8-9.5 33.3 0 s9.5 24.7 0 34.2 L50 88.9 Z" 
-                                  fill="#2a0a0a" stroke="#8B0000" stroke-width="0.5" />
-                        </svg>
-                    </div>
-                    <!-- Crack -->
-                    <div class="crack-line" id="heart-crack"></div>
-                </div>
-                
-                <div class="white-void"></div>
-            </div>
-        </div>
-
-        <!-- 6. Second Chance -->
-        <section id="second-chance" class="section" style="background-color: var(--color-stone-50); min-height: 80vh;">
-            <div style="text-align: center; max-width: 36rem;">
-                <div class="fade-text" style="font-size: 1.875rem; color: var(--color-stone-600); font-weight: 300; margin-bottom: 6rem;">
-                    I asked again.
-                </div>
-                <div class="fade-text" style="font-size: 1.875rem; color: var(--color-stone-400); font-weight: 300; font-style: italic; transition-delay: 0.5s;">
-                    Even later.
-                </div>
-            </div>
-        </section>
-
-        <!-- 7. Secrets -->
-        <div id="secrets">
-            <div class="parallax-bg">
-                <div class="secret-word" data-speed="0.2" style="top: 20%; left: 10%; font-size: 4rem;">Car crash</div>
-                <div class="secret-word" data-speed="0.5" style="top: 60%; right: 10%; font-size: 3rem;">Overspeeding</div>
-                <div class="secret-word" data-speed="0.1" style="top: 40%; left: 40%; font-size: 5rem; opacity: 0.3;">Sneaking out</div>
-                <div class="secret-word" data-speed="0.3" style="bottom: 10%; left: 20%; font-size: 2.5rem;">Things said in trust</div>
+        <!-- 3. Trial / Charges -->
+        <section class="section" style="background: white; color: black;">
+            <h2 style="font-family: var(--font-display); font-size: 4rem;">THE CHARGES</h2>
+            
+            <div class="charge-card scroll-reveal" style="--rotation: -2deg;">
+                <div class="charge-title">CHARGE 1</div>
+                <p>Denying Access to Digital Property</p>
             </div>
             
-            <div class="secrets-card fade-text">
-                <h2 style="font-size: 2.5rem; color: var(--color-stone-700); font-family: var(--font-serif); text-align: center; line-height: 1.2;">
-                    Maybe trust was uneven.
-                </h2>
+            <div class="charge-card scroll-reveal" style="--rotation: 2deg;">
+                <div class="charge-title">CHARGE 2</div>
+                <p>Aggressive Phone Snatching</p>
+            </div>
+            
+            <div class="charge-card scroll-reveal" style="--rotation: -1deg;">
+                <div class="charge-title">CHARGE 3</div>
+                <p>Suspicious Folder Behavior</p>
+            </div>
+        </section>
+
+        <!-- 4. Sus Meter -->
+        <section class="section" id="sus-section" style="color: black;">
+            <h2 style="font-family: var(--font-display); font-size: 3rem;">EVIDENCE ANALYSIS</h2>
+            
+            <div class="sus-meter-container">
+                <div class="sus-label">SUSPICION LEVEL</div>
+                <div class="sus-meter-fill" id="sus-fill"></div>
+                <div class="sus-value" id="sus-value">0%</div>
+            </div>
+            
+            <div id="sus-text" style="margin-top: 1rem; font-weight: bold; opacity: 0;">
+                CRITICAL LEVELS DETECTED
+            </div>
+        </section>
+
+        <!-- 5. Folder Reveal (Sticky) -->
+        <div id="folder-section">
+            <div class="sticky-stage">
+                <div class="folder" id="folder">
+                    <div class="folder-label">SHASHWAT</div>
+                </div>
+                
+                <div class="stamp" id="denied-stamp">ACCESS<br>DENIED</div>
+                
+                <div class="glitch-text" id="glitch-msg">
+                    > SYSTEM ERROR<br>
+                    > TRUST.EXE NOT FOUND<br>
+                    > INITIATING DRAMA PROTOCOL...
+                </div>
+
+                <div id="sarcastic-comment">
+                    "Ohhh okay. So we share passwords,<br>but galleries are national security?"
+                </div>
+
+                <button class="explain-btn" id="explainBtn">Care to explain, madam?</button>
             </div>
         </div>
 
-        <!-- 8. Guilt -->
-        <section id="guilt" class="section">
-            <div style="max-width: 36rem; text-align: center;">
-                <div class="fade-text" style="font-size: 1.25rem; line-height: 2; font-weight: 300; color: var(--color-stone-400);">
-                    I remember the speaker moment. <br/>
-                    The silence that followed. <br/>
-                    <span style="color: var(--color-stone-200);">I felt the weight of it.</span>
-                </div>
-                <div class="divider-line"></div>
-                <div class="fade-text" style="font-size: 1.5rem; font-style: italic; color: var(--color-stone-500); font-family: var(--font-serif); transition-delay: 0.4s;">
-                    Accountability is quiet.
-                </div>
+        <!-- 6. Audacity -->
+        <section class="section" style="background: black; color: white;">
+            <div class="audacity-text scroll-reveal" style="--rotation: 0deg;">
+                I EVEN GAVE YOU<br>A SECOND CHANCE.
+            </div>
+            <div class="audacity-text scroll-reveal red" style="--rotation: 0deg; margin-top: 2rem;">
+                THE AUDACITY.
             </div>
         </section>
 
-        <!-- 9. Final -->
-        <section id="final" class="section">
-            <div style="text-align: center;">
-                <div class="fade-text" style="font-size: 1.5rem; color: var(--color-gray-800); font-weight: 300; letter-spacing: 0.05em; margin-bottom: 2rem;">
-                    No blame.
-                </div>
-                <div class="fade-text" style="font-size: 1.5rem; color: var(--color-gray-800); font-weight: 300; letter-spacing: 0.05em; transition-delay: 0.5s;">
-                    No revenge.
-                </div>
-                <div style="height: 4rem;"></div>
-                <div class="fade-text" style="font-size: 3.5rem; color: black; font-family: var(--font-serif); letter-spacing: -0.02em; transition-delay: 1.5s;">
-                    Just clarity.
-                </div>
+        <!-- 7. Inside Jokes -->
+        <section class="section" style="background: #fef3c7; color: black;">
+            <div class="joke-marquee" style="top: 10%;">MERCEDES MOMENT MERCEDES MOMENT MERCEDES MOMENT</div>
+            <div class="joke-marquee" style="bottom: 10%; direction: rtl;">BYE BYE LOOP BYE BYE LOOP BYE BYE LOOP</div>
+            
+            <div style="z-index: 10; background: white; padding: 2rem; border: 4px solid black; transform: rotate(-2deg);">
+                <h2 style="font-family: var(--font-display); font-size: 2.5rem;">BESTIE.</h2>
+                <p style="font-family: var(--font-mono); font-size: 1.2rem;">We share passwords.<br>Not phones?<br><br><span class="red bold">EXPLAIN.</span></p>
             </div>
         </section>
+
+        <!-- 8. Verdict & Scoreboard -->
+        <section class="section" style="background: white; color: black;">
+            <h2 style="font-family: var(--font-display); font-size: 4rem;">FINAL VERDICT</h2>
+            
+            <div class="stamp stamped" style="position: relative; transform: rotate(-5deg); opacity: 1; margin: 2rem 0;">GUILTY</div>
+            
+            <div class="scoreboard">
+                <div class="score-box">
+                    <div class="score-label">ME</div>
+                    100
+                </div>
+                <div class="score-box">
+                    <div class="score-label">HER</div>
+                    <span id="her-score">100</span>
+                </div>
+            </div>
+            
+            <p style="font-family: var(--font-mono); font-size: 1.2rem; margin-top: 2rem;">
+                PUNISHMENT:<br>
+                <span class="bold">UNLIMITED EXPLANATION REQUIRED.</span>
+            </p>
+            
+            <p style="margin-top: 4rem; font-size: 0.8rem; opacity: 0.6;">COURT ADJOURNED (BUT I'M STILL MAD)</p>
+        </section>
+
     </main>
 
-    <footer>
-        ECHOES OF MEMORY
-    </footer>
+    <div class="theory-popup" id="theoryPopup"></div>
 
     <script>
-        // --- Utils ---
-        const mapRange = (value, inMin, inMax, outMin, outMax) => {
-            return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-        };
-        const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+        // --- Toggle Dramatic Mode ---
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+        let isDramatic = false;
 
-        // --- Intersection Observer for Fade Text ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+        modeToggle.addEventListener('click', () => {
+            isDramatic = !isDramatic;
+            body.classList.toggle('dramatic-mode');
+            modeToggle.textContent = isDramatic ? "Dramatic Mode: ON" : "Dramatic Mode: OFF";
+            
+            if(isDramatic) {
+                // Add heartbeat sound effect visual
+                document.body.style.animation = "bg-pulse 0.5s infinite";
+            } else {
+                document.body.style.animation = "none";
+            }
+        });
 
+        // --- Scroll Reveal ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    
-                    // Special handling for lock icon
-                    if (entry.target.classList.contains('lock-container')) {
-                        setTimeout(() => {
-                            entry.target.querySelector('.lock-icon').classList.add('open');
-                        }, 1000);
-                    }
-                    
-                    // Special handling for divider line
-                    if (entry.target.parentElement && entry.target.parentElement.querySelector('.divider-line')) {
-                         entry.target.parentElement.querySelector('.divider-line').classList.add('visible');
-                    }
-                    
-                    // Special handling for dots
-                    if (entry.target.classList.contains('dot')) {
-                        entry.target.classList.add('visible');
-                    }
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.2 });
 
-        document.querySelectorAll('.fade-text, .dot').forEach(el => observer.observe(el));
-        
-        // Also observe the divider line container's parent or trigger manually
-        const guiltSection = document.getElementById('guilt');
-        const guiltObserver = new IntersectionObserver((entries) => {
-            if(entries[0].isIntersecting) {
-                document.querySelector('.divider-line').classList.add('visible');
-            }
-        }, { threshold: 0.5 });
-        guiltObserver.observe(guiltSection);
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
 
-
-        // --- Particle System ---
-        const canvas = document.getElementById('gulal-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        function initParticles() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            particles = [];
-            
-            const colors = ['rgba(255, 105, 180, 0.4)', 'rgba(255, 160, 122, 0.4)', 'rgba(255, 218, 185, 0.3)', 'rgba(255, 192, 203, 0.4)'];
-            
-            for (let i = 0; i < 60; i++) {
-                particles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    r: Math.random() * 8 + 2,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    dx: (Math.random() - 0.5) * 0.3,
-                    dy: (Math.random() - 0.5) * 0.3,
-                });
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => {
-                p.x += p.dx;
-                p.y += p.dy;
-                
-                if (p.x < -50) p.x = width + 50;
-                if (p.x > width + 50) p.x = -50;
-                if (p.y < -50) p.y = height + 50;
-                if (p.y > height + 50) p.y = -50;
-                
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = p.color;
-                ctx.fill();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-
-        window.addEventListener('resize', initParticles);
-        initParticles();
-        animateParticles();
-
-
-        // --- Scroll Animations (Heart & Parallax) ---
-        const heartWrapper = document.getElementById('heart-wrapper');
-        const heartBg = document.getElementById('heart-bg');
-        const heartText = document.getElementById('heart-text');
-        const heartContainer = document.getElementById('heart-container');
-        const heartLeft = document.getElementById('heart-left');
-        const heartRight = document.getElementById('heart-right');
-        const heartCrack = document.getElementById('heart-crack');
-        
-        const secretsSection = document.getElementById('secrets');
-        const secretWords = document.querySelectorAll('.secret-word');
+        // --- Sus Meter Logic ---
+        const susSection = document.getElementById('sus-section');
+        const susFill = document.getElementById('sus-fill');
+        const susValue = document.getElementById('sus-value');
+        const susText = document.getElementById('sus-text');
 
         window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const viewportHeight = window.innerHeight;
-
-            // Heart Section Logic
-            const heartRect = heartWrapper.getBoundingClientRect();
-            const heartStart = heartWrapper.offsetTop;
-            const heartHeight = heartWrapper.offsetHeight;
+            const rect = susSection.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
             
-            // Calculate progress (0 to 1) within the scrollable area of the sticky section
-            // The sticky content is 100vh, so scrollable distance is heartHeight - viewportHeight
-            const scrollableDistance = heartHeight - viewportHeight;
-            const scrolled = scrollY - heartStart;
-            
-            let progress = 0;
-            if (scrolled > 0) {
-                progress = scrolled / scrollableDistance;
-            }
-            progress = clamp(progress, 0, 1);
-
-            // Apply Animations based on progress
-            
-            // 1. Scale Heart: 0 -> 0.2 -> 0.5 maps to Scale 0.8 -> 1 -> 1.5
-            let scale = 0.8;
-            if (progress < 0.2) {
-                scale = mapRange(progress, 0, 0.2, 0.8, 1);
-            } else if (progress < 0.5) {
-                scale = mapRange(progress, 0.2, 0.5, 1, 1.5);
-            } else {
-                scale = 1.5;
-            }
-            heartContainer.style.transform = `scale(${scale})`;
-
-            // 2. Background Opacity: 0 -> 0.2 maps to 0 -> 1
-            const bgOp = clamp(mapRange(progress, 0, 0.2, 0, 1), 0, 1);
-            heartBg.style.opacity = bgOp;
-
-            // 3. Text Opacity: 0.1 -> 0.3 (Fade In) -> 0.4 (Fade Out)
-            let textOp = 0;
-            if (progress > 0.1 && progress <= 0.3) {
-                textOp = mapRange(progress, 0.1, 0.3, 0, 1);
-            } else if (progress > 0.3 && progress < 0.4) {
-                textOp = mapRange(progress, 0.3, 0.4, 1, 0);
-            }
-            heartText.style.opacity = textOp;
-
-            // 4. Crack Separation: 0.4 -> 0.8 maps to 0 -> 2000px
-            let separation = 0;
-            if (progress > 0.4) {
-                separation = mapRange(progress, 0.4, 0.8, 0, 2000);
-            }
-            heartLeft.style.transform = `translateX(${-separation}px)`;
-            heartRight.style.transform = `translateX(${separation}px)`;
-
-            // 5. Crack Line Opacity: Fades out as they separate
-            let crackOp = 1;
-            if (progress > 0.4) {
-                crackOp = clamp(mapRange(progress, 0.4, 0.5, 1, 0), 0, 1);
-            }
-            heartCrack.style.opacity = crackOp;
-
-
-            // Secrets Parallax Logic
-            const secretsRect = secretsSection.getBoundingClientRect();
-            // If section is in view
-            if (secretsRect.top < viewportHeight && secretsRect.bottom > 0) {
-                // Calculate relative scroll position
-                const relativeScroll = (viewportHeight - secretsRect.top) * 0.5; // Factor to slow it down
+            if (rect.top < windowHeight && rect.bottom > 0) {
+                // Calculate progress through the section
+                let progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+                progress = Math.min(Math.max(progress, 0), 1);
                 
-                secretWords.forEach(word => {
-                    const speed = parseFloat(word.getAttribute('data-speed'));
-                    const yPos = relativeScroll * speed * -1; // Move up
-                    word.style.transform = `translateY(${yPos}px)`;
-                });
+                // Map to 0-100% but exaggerated
+                let percentage = Math.floor(progress * 150); 
+                if (percentage > 100) percentage = 100; // Cap at 100 visually but animate fast
+                
+                susFill.style.width = `${percentage}%`;
+                susValue.textContent = `${percentage}%`;
+                
+                if (percentage > 80) {
+                    susText.style.opacity = 1;
+                    susFill.style.background = "repeating-linear-gradient(45deg, #dc2626, #dc2626 10px, #7f1d1d 10px, #7f1d1d 20px)";
+                }
             }
         });
+
+        // --- Folder Section Logic ---
+        const folderSection = document.getElementById('folder-section');
+        const folder = document.getElementById('folder');
+        const stamp = document.getElementById('denied-stamp');
+        const glitchMsg = document.getElementById('glitch-msg');
+        const sarcasticComment = document.getElementById('sarcastic-comment');
+        const explainBtn = document.getElementById('explainBtn');
+
+        window.addEventListener('scroll', () => {
+            const rect = folderSection.getBoundingClientRect();
+            const offset = folderSection.offsetTop;
+            const height = folderSection.offsetHeight;
+            const scrollY = window.scrollY;
+            
+            // Progress 0 to 1 within the sticky container
+            const start = offset;
+            const end = offset + height - window.innerHeight;
+            let progress = (scrollY - start) / (end - start);
+            progress = Math.min(Math.max(progress, 0), 1);
+
+            // 1. Zoom Folder
+            if (progress < 0.3) {
+                let scale = 1 + (progress * 10); // Zoom in
+                folder.style.transform = `scale(${scale})`;
+                folder.style.opacity = 1;
+                stamp.classList.remove('stamped');
+                stamp.style.opacity = 0;
+                glitchMsg.classList.remove('active');
+                sarcasticComment.style.opacity = 0;
+                explainBtn.style.display = 'none';
+            } 
+            // 2. Stamp
+            else if (progress >= 0.3 && progress < 0.5) {
+                folder.style.transform = `scale(4)`;
+                stamp.style.opacity = 1;
+                stamp.classList.add('stamped');
+                glitchMsg.classList.remove('active');
+            }
+            // 3. Glitch
+            else if (progress >= 0.5 && progress < 0.7) {
+                glitchMsg.classList.add('active');
+                folder.style.opacity = 0;
+                stamp.style.opacity = 0;
+            }
+            // 4. Sarcasm & Button
+            else if (progress >= 0.7) {
+                glitchMsg.classList.remove('active');
+                sarcasticComment.style.opacity = 1;
+                explainBtn.style.display = 'block';
+            }
+        });
+
+        // --- Explain Button Theories ---
+        const theories = [
+            "HIDDEN BOYFRIEND???",
+            "SECRET ADMIRER???",
+            "CRINGE SELFIES DETECTED",
+            "BLACKMAIL CONTENT",
+            "PLANNING MY SURPRISE PARTY? (DOUBT IT)",
+            "MEMES YOU DON'T WANT TO SHARE"
+        ];
+        const theoryPopup = document.getElementById('theoryPopup');
+
+        explainBtn.addEventListener('click', () => {
+            const randomTheory = theories[Math.floor(Math.random() * theories.length)];
+            theoryPopup.textContent = randomTheory;
+            theoryPopup.classList.add('show');
+            
+            // Shake effect
+            document.body.classList.add('shake-constant');
+            
+            setTimeout(() => {
+                theoryPopup.classList.remove('show');
+                document.body.classList.remove('shake-constant');
+            }, 2000);
+        });
+
+        // --- Scoreboard Animation ---
+        const herScoreEl = document.getElementById('her-score');
+        let score = 100;
+        let hasAnimatedScore = false;
+        
+        const scoreObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !hasAnimatedScore) {
+                hasAnimatedScore = true;
+                const interval = setInterval(() => {
+                    score--;
+                    herScoreEl.textContent = score;
+                    herScoreEl.style.color = "red";
+                    if (score <= 42) {
+                        clearInterval(interval);
+                        herScoreEl.textContent = "42";
+                    }
+                }, 50);
+            }
+        });
+        scoreObserver.observe(herScoreEl);
 
     </script>
 </body>
