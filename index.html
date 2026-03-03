@@ -49,7 +49,80 @@
             100% { background-color: #1a0505; }
         }
 
-        /* --- Utilities --- */
+        /* --- Impact Effects --- */
+        @keyframes flash-white {
+            0% { background-color: white; opacity: 1; }
+            100% { background-color: transparent; opacity: 0; }
+        }
+        .flash-overlay {
+            position: fixed;
+            inset: 0;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .flash-overlay.active {
+            animation: flash-white 0.1s ease-out;
+        }
+
+        @keyframes violent-shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-5px, 5px); }
+            40% { transform: translate(5px, -5px); }
+            60% { transform: translate(-5px, -5px); }
+            80% { transform: translate(5px, 5px); }
+            100% { transform: translate(0, 0); }
+        }
+        .shake-screen {
+            animation: violent-shake 0.2s ease-in-out;
+        }
+
+        @keyframes rgb-split {
+            0% { text-shadow: -2px 0 red, 2px 0 blue; }
+            25% { text-shadow: 2px 0 red, -2px 0 blue; }
+            50% { text-shadow: -2px 0 red, 2px 0 blue; }
+            75% { text-shadow: 2px 0 red, -2px 0 blue; }
+            100% { text-shadow: none; }
+        }
+        .rgb-glitch {
+            animation: rgb-split 0.2s steps(2) infinite;
+        }
+
+        /* Static Noise Overlay */
+        .static-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+            opacity: 0;
+            pointer-events: none;
+            z-index: 998;
+            display: none;
+        }
+        .static-overlay.active {
+            display: block;
+            opacity: 0.3;
+            animation: flash-white 0.2s reverse;
+        }
+
+        /* Scoreboard Bounce */
+        @keyframes bounce-score {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        .bounce {
+            animation: bounce-score 1s;
+        }
+        .redeemable-text {
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            color: var(--color-accent);
+            opacity: 0;
+            transition: opacity 0.5s;
+            margin-top: 0.5rem;
+        }
+        .redeemable-text.visible { opacity: 1; }
         .section {
             min-height: 100vh;
             width: 100%;
@@ -373,7 +446,8 @@
     </style>
 </head>
 <body>
-
+    <div class="flash-overlay" id="flashOverlay"></div>
+    <div class="static-overlay" id="staticOverlay"></div>
     <button class="mode-toggle" id="modeToggle">Dramatic Mode: OFF</button>
 
     <main>
@@ -488,6 +562,7 @@
                 <div class="score-box">
                     <div class="score-label">HER</div>
                     <span id="her-score">100</span>
+                    <div class="redeemable-text" id="redeemableText">Redeemable. Barely.</div>
                 </div>
             </div>
             
@@ -569,6 +644,10 @@
         const glitchMsg = document.getElementById('glitch-msg');
         const sarcasticComment = document.getElementById('sarcastic-comment');
         const explainBtn = document.getElementById('explainBtn');
+        
+        const flashOverlay = document.getElementById('flashOverlay');
+        const staticOverlay = document.getElementById('staticOverlay');
+        let hasStamped = false;
 
         window.addEventListener('scroll', () => {
             const rect = folderSection.getBoundingClientRect();
@@ -592,12 +671,40 @@
                 glitchMsg.classList.remove('active');
                 sarcasticComment.style.opacity = 0;
                 explainBtn.style.display = 'none';
+                hasStamped = false; // Reset stamp flag
+                
+                // Reset effects
+                document.body.classList.remove('shake-screen');
+                stamp.classList.remove('rgb-glitch');
+                staticOverlay.classList.remove('active');
             } 
-            // 2. Stamp
+            // 2. Stamp (The Climax)
             else if (progress >= 0.3 && progress < 0.5) {
                 folder.style.transform = `scale(4)`;
                 stamp.style.opacity = 1;
                 stamp.classList.add('stamped');
+                
+                // Trigger impact effects ONLY ONCE when entering this state
+                if (!hasStamped) {
+                    hasStamped = true;
+                    
+                    // 1. White Flash
+                    flashOverlay.classList.add('active');
+                    setTimeout(() => flashOverlay.classList.remove('active'), 100);
+                    
+                    // 2. Screen Shake
+                    document.body.classList.add('shake-screen');
+                    setTimeout(() => document.body.classList.remove('shake-screen'), 200);
+                    
+                    // 3. RGB Glitch on Stamp
+                    stamp.classList.add('rgb-glitch');
+                    setTimeout(() => stamp.classList.remove('rgb-glitch'), 200);
+                    
+                    // 4. Static Noise
+                    staticOverlay.classList.add('active');
+                    setTimeout(() => staticOverlay.classList.remove('active'), 150);
+                }
+                
                 glitchMsg.classList.remove('active');
             }
             // 3. Glitch
@@ -641,6 +748,7 @@
 
         // --- Scoreboard Animation ---
         const herScoreEl = document.getElementById('her-score');
+        const redeemableText = document.getElementById('redeemableText');
         let score = 100;
         let hasAnimatedScore = false;
         
@@ -654,6 +762,12 @@
                     if (score <= 42) {
                         clearInterval(interval);
                         herScoreEl.textContent = "42";
+                        
+                        // Bounce & Redeemable Text
+                        herScoreEl.parentElement.classList.add('bounce');
+                        setTimeout(() => {
+                            redeemableText.classList.add('visible');
+                        }, 500);
                     }
                 }, 50);
             }
